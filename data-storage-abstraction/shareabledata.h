@@ -105,6 +105,7 @@ public:
 	 * setCollectionIdentifier.
 	 * notwithstanding the collection will be stored in a shared location.
 	 * use inPersonalDataStorage = true to change this.
+	 * privacy is respected by this class, it is not inside the actual storage.
 	 *
 	 * pass asUnique = true if you want for certain to have a dedicated
 	 * collection not yet existing if the identifier set in
@@ -159,7 +160,8 @@ public:
 	 *
 	 * note: no benefit is I being aware of in returning the QString
 	 * representation because that is either already known to the creator,
-	 * is slower to use for identification from others
+	 * is slower in utilisation by setCollectionIdentifier than the
+	 * ShareableData::CollectionIdentifier (when that was shared to others)
 	 * and might be a privacy issue for the creator when known to others.
 	 */
 	ShareableData::CollectionIdentifier getCollectionIdentifier();
@@ -183,9 +185,10 @@ public:
 	QVarLengthArray<ShareableData::DesignatorIdentifier, D> getDesignators();
 
 	/*
-	 * each QVarLengthArray is to have the same length.
-	 * they contain data per designator.
-	 * across all of these are inner group.
+	 * every QVarLengthArray in the value passed in the parameter data is to have
+	 * the same length.
+	 * they contain the data to store per designator.
+	 * per same position in each QVarLengthArray across all of these are inner group.
 	 *
 	 * returns an empty QVarLengthArray if data didn't get added
 	 * (for example when designators don't exist).
@@ -193,7 +196,7 @@ public:
 	 * returned QVarLengthArray's length otherwise equals data's
 	 * QVarLengthArray length.
 	 *
-	 * returned QVarLengthArray's entries each identify an inner group
+	 * returned QVarLengthArray's entries each identify a unique inner group
 	 * across all designators.
 	 * the value of the position each of them is in is the value of the position
 	 * the data each of them identfies across QVarLengthArray is in in the
